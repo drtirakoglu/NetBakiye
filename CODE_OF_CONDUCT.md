@@ -34,7 +34,7 @@ Bu Davranış Kuralları, hem proje alanlarında hem de bir bireyin projeyi veya
 
 ## Uygulama
 
-Kötüye kullanım, taciz veya diğer kabul edilemez davranışlar, proje ekibine [E-POSTA ADRESİ BURAYA GELECEK] adresinden bildirilerek raporlanabilir. Tüm şikayetler incelenecek ve soruşturulacak, durumun şartlarına göre gerekli ve uygun görülen bir yanıt verilecektir. Proje ekibi, olayı bildiren kişiye karşı gizliliği korumakla yükümlüdür.
+Kötüye kullanım, taciz veya diğer kabul edilemez davranışlar, proje ekibine drtirakoglu@hotmail.com adresinden bildirilerek raporlanabilir. Tüm şikayetler incelenecek ve soruşturulacak, durumun şartlarına göre gerekli ve uygun görülen bir yanıt verilecektir. Proje ekibi, olayı bildiren kişiye karşı gizliliği korumakla yükümlüdür.
 
 ## Atıf
 
