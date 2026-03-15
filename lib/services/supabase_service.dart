@@ -40,6 +40,10 @@ class SupabaseService {
     await _client.from('accounts').insert(account.toJson());
   }
 
+  Future<void> updateAccount(AppAccount account) async {
+    await _client.from('accounts').update(account.toJson()).eq('id', account.id);
+  }
+
   // CATEGORIES
   Future<List<AppCategory>> getCategories() async {
     final res = await _client.from('categories').select().order('name');

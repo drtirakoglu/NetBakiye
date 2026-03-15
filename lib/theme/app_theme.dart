@@ -12,7 +12,6 @@ class AppTheme {
         primary: AppColors.accentStart,
         secondary: AppColors.accentEnd,
         surface: AppColors.surface,
-        background: AppColors.background,
         error: AppColors.danger,
       ),
       textTheme: GoogleFonts.interTextTheme(
@@ -27,7 +26,7 @@ class AppTheme {
               ),
             ),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         color: AppColors.card,
         elevation: 0,
         shape: RoundedRectangleBorder(

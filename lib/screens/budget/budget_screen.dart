@@ -26,7 +26,10 @@ class BudgetScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 const Text(
                   'Aylık Zarflar',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 const SizedBox(height: 12),
                 ...budgets.map((budget) {
@@ -40,19 +43,23 @@ class BudgetScreen extends ConsumerWidget {
                       name: category.name,
                       spent: budget.spent,
                       limit: budget.allocated,
-                      color: Color(int.parse((category.color ?? '#4ADE80').replaceAll('#', '0xFF'))),
+                      color: Color(int.parse((category.color ?? '#4ADE80')
+                          .replaceAll('#', '0xFF'))),
                       icon: Icons.folder_open,
                     ),
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(child: Text('Kategoriler yüklenemedi: $err')),
+          error: (err, stack) =>
+              Center(child: Text('Kategoriler yüklenemedi: $err')),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Hata: $err', style: const TextStyle(color: Colors.white))),
+        error: (err, stack) => Center(
+            child: Text('Hata: $err',
+                style: const TextStyle(color: Colors.white))),
       ),
     );
   }
@@ -75,18 +82,21 @@ class BudgetScreen extends ConsumerWidget {
               children: [
                 const Text(
                   'Atanmamış Para',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: AppColors.primary),
                 ),
                 Text(
                   'Bütçelenmeyi bekleyen ${Formatters.formatCurrency(1250.00)} var.',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                  style: const TextStyle(
+                      color: AppColors.textSecondary, fontSize: 13),
                 ),
               ],
             ),
           ),
           TextButton(
             onPressed: () {},
-            child: const Text('Ata', style: TextStyle(fontWeight: FontWeight.bold)),
+            child: const Text('Ata',
+                style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
