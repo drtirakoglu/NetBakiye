@@ -4,19 +4,22 @@ NetBakiye, modern ve kullanıcı dostu bir kişisel finans yönetim uygulamasıd
 
 ## 🚀 Özellikler
 
-- **Özet Panosu (Dashboard):** Toplam bakiyenizi, aylık gelir ve gider dağılımınızı grafiklerle takip edin.
-- **Bütçe Yönetimi:** Farklı kategoriler için bütçe limitleri belirleyin ve harcamalarınızı kontrol altında tutun.
-- **Hesap ve Varlık Takibi:** Banka hesaplarınızı, nakit paranızı ve diğer varlıklarınızı yönetin.
-- **Tasarruf Hedefleri:** Hayallerinizdeki şeyler için hedefler oluşturun ve ilerlemenizi görün.
-- **İşlem Geçmişi:** Tüm finansal hareketlerinizi detaylıca kaydedin ve listeleyin.
+- **Özet Panosu (Dashboard):** Gerçek net bakiye, varlıklar ve borçlarınızı anlık takip edin.
+- **Hızlı İşlem Girişi:** Gelir ve giderlerinizi taksit seçenekleriyle saniyeler içinde kaydedin.
+- **Dinamik Tema Sistemi:** 5 farklı premium renk teması (Teal, Mor, Mavi, Turuncu, Pembe) ile uygulamayı kişiselleştirin.
+- **Demo Modu:** Supabase bağlantısı olmadan, yerel verilerle tüm özellikleri keşfedin.
+- **AI Röntgen Raporu:** Finansal durumunuza göre yapay zeka destekli tavsiyeler alın.
+- **Tasarruf Hedefleri:** Sürpriz para girişi gibi dinamik kategorilerle birikimlerinizi yönetin.
+- **Paylaşımlı Erişim:** Hesabınıza erişebilecek diğer kullanıcıları yönetin.
 
 ## 🛠️ Teknoloji Yığını
 
 - **Framework:** [Flutter](https://flutter.dev)
 - **State Management:** [Riverpod](https://riverpod.dev)
-- **Backend:** [Supabase](https://supabase.com) (Database & Auth)
+- **Backend:** [Supabase](https://supabase.com) & Local Demo Service
 - **Navigation:** [Go Router](https://pub.dev/packages/go_router)
 - **Charts:** [FL Chart](https://pub.dev/packages/fl_chart)
+
 
 ## 📦 Kurulum
 
