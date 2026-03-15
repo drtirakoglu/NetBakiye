@@ -1,34 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'providers/auth_provider.dart';
-import 'screens/auth/login_screen.dart';
-import 'screens/auth/register_screen.dart';
 import 'screens/dashboard/dashboard_screen.dart';
 import 'screens/budget/budget_screen.dart';
 import 'screens/accounts/accounts_screen.dart';
 import 'screens/goals/goals_screen.dart';
-
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorKey = GlobalKey<NavigatorState>();
+import 'screens/settings/settings_screen.dart';
+import 'screens/settings/profile_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateProvider);
-
   return GoRouter(
-    navigatorKey: _rootNavigatorKey,
     initialLocation: '/',
-    redirect: (context, state) {
-      final loggedIn = authState.value?.session != null;
-      final isAuthPath = state.matchedLocation.startsWith('/auth');
-
-      if (!loggedIn && !isAuthPath) return '/auth/login';
-      if (loggedIn && isAuthPath) return '/';
-      return null;
-    },
     routes: [
       ShellRoute(
-        navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) => AppScaffold(child: child),
         routes: [
           GoRoute(path: '/', builder: (context, state) => const DashboardScreen()),
@@ -38,12 +22,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
       GoRoute(
-        path: '/auth/login',
-        builder: (context, state) => const LoginScreen(),
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
-        path: '/auth/register',
-        builder: (context, state) => const RegisterScreen(),
+        path: '/settings/profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );

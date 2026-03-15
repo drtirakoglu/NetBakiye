@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'theme/app_theme.dart';
+import 'providers/data_providers.dart';
 import 'app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Supabase
-  // Note: These are placeholders. In a real app, these would be in a config file or env vars.
-  await Supabase.initialize(
-    url: 'https://iazjuonxenbvqavnlfvs.supabase.co',
-    anonKey: 'sb_publishable_0ITkKhVb0AzCj3dAwnQnmg_UwTad8Sc',
-  );
-
+  // Demo mode: No Supabase initialization needed
   runApp(
     const ProviderScope(
       child: NetBakiyeApp(),
@@ -27,25 +21,13 @@ class NetBakiyeApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final themeName = ref.watch(themeColorProvider);
 
     return MaterialApp.router(
       title: 'NetBakiye',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.darkTheme(themeName: themeName),
       routerConfig: router,
-    );
-  }
-}
-
-class AppShell extends StatelessWidget {
-  const AppShell({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('NetBakiye - Hoş Geldiniz'),
-      ),
     );
   }
 }

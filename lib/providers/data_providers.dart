@@ -1,38 +1,63 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/account.dart';
 import '../models/transaction_model.dart';
 import '../models/budget.dart';
 import '../models/category.dart';
-import 'auth_provider.dart';
+import '../models/goal.dart';
+
 import '../services/asset_price_service.dart';
+import '../services/demo_service.dart';
+
+/// Global demo service instance
+final demoServiceProvider = Provider((ref) => DemoService());
 
 final accountsStreamProvider = StreamProvider<List<AppAccount>>((ref) {
-  final supabase = ref.watch(supabaseServiceProvider);
-  return supabase.subscribeToTable('accounts').map((list) {
+  final demo = ref.watch(demoServiceProvider);
+  return demo.subscribeToTable('accounts').map((list) {
     return list.map((json) => AppAccount.fromJson(json)).toList();
   });
 });
 
 final categoriesStreamProvider = StreamProvider<List<AppCategory>>((ref) {
-  final supabase = ref.watch(supabaseServiceProvider);
-  return supabase.subscribeToTable('categories').map((list) {
+  final demo = ref.watch(demoServiceProvider);
+  return demo.subscribeToTable('categories').map((list) {
     return list.map((json) => AppCategory.fromJson(json)).toList();
   });
 });
 
 final transactionsStreamProvider = StreamProvider<List<AppTransaction>>((ref) {
-  final supabase = ref.watch(supabaseServiceProvider);
-  return supabase.subscribeToTable('transactions').map((list) {
+  final demo = ref.watch(demoServiceProvider);
+  return demo.subscribeToTable('transactions').map((list) {
     return list.map((json) => AppTransaction.fromJson(json)).toList();
   });
 });
 
 final budgetsStreamProvider = StreamProvider<List<AppBudget>>((ref) {
-  final supabase = ref.watch(supabaseServiceProvider);
-  return supabase.subscribeToTable('budgets').map((list) {
+  final demo = ref.watch(demoServiceProvider);
+  return demo.subscribeToTable('budgets').map((list) {
     return list.map((json) => AppBudget.fromJson(json)).toList();
   });
 });
+
+final goalsStreamProvider = StreamProvider<List<AppGoal>>((ref) {
+  final demo = ref.watch(demoServiceProvider);
+  return demo.subscribeToTable('goals').map((list) {
+    return list.map((json) => AppGoal.fromJson(json)).toList();
+  });
+});
+
+/// Theme color provider
+final themeColorProvider = StateProvider<String>((ref) => 'teal');
+
+/// Maps theme color name to actual color values
+Map<String, Color> get themeColorMap => {
+  'teal': const Color(0xFF0DBCB5),
+  'purple': const Color(0xFF8B5CF6),
+  'blue': const Color(0xFF3B82F6),
+  'orange': const Color(0xFFF97316),
+  'rose': const Color(0xFFF43F5E),
+};
 
 /// A combined provider to calculate the summary values for the Dashboard
 final dashboardSummaryProvider = Provider((ref) {
@@ -47,7 +72,6 @@ final dashboardSummaryProvider = Provider((ref) {
       totalAssets += acc.balance;
     } else {
       totalDebts += acc.balance.abs();
-      // KMH or CC interest projection simplified
       projectedInterest += (acc.balance.abs() * (acc.interestRate / 100));
     }
   }
@@ -59,7 +83,7 @@ final dashboardSummaryProvider = Provider((ref) {
     'totalAssets': totalAssets,
     'totalDebts': totalDebts,
     'projectedInterest': projectedInterest,
-    'safeToSpend': netBalance * 0.1, // Simplify for demo: 10% of net balance is safe
+    'safeToSpend': netBalance * 0.1,
   };
 });
 
@@ -79,7 +103,7 @@ final aiAnalysisProvider = FutureProvider<String>((ref) async {
   final netBalance = summary['netBalance'] as double;
   final projectedInterest = summary['projectedInterest'] as double;
 
-  await Future.delayed(const Duration(seconds: 1)); // Simulate AI thinking
+  await Future.delayed(const Duration(seconds: 1));
 
   if (projectedInterest > 500) {
     return "Dikkat! Aylık borç maliyetin ${projectedInterest.toStringAsFixed(2)}₺. KMH ve Kredi Kartı asgari ödemelerini önceliklendirmelisin.";

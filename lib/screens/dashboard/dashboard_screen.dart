@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../providers/data_providers.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/formatters.dart';
@@ -14,7 +15,6 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Live data from summary provider
     final summary = ref.watch(dashboardSummaryProvider);
     
     final netBalance = summary['netBalance'] ?? 0.0;
@@ -32,8 +32,8 @@ class DashboardScreen extends ConsumerWidget {
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.person_outline),
-            onPressed: () {},
+            icon: const Icon(Icons.settings_outlined),
+            onPressed: () => context.push('/settings'),
           ),
         ],
       ),
@@ -92,4 +92,3 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 }
-

@@ -3,14 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  static ThemeData get darkTheme {
+  static ThemeData darkTheme({String themeName = 'teal'}) {
+    final colors = AppColors.getThemeColors(themeName);
+    final accentStart = colors[0];
+    final accentEnd = colors[1];
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.accentStart,
-        secondary: AppColors.accentEnd,
+      colorScheme: ColorScheme.dark(
+        primary: accentStart,
+        secondary: accentEnd,
         surface: AppColors.surface,
         error: AppColors.danger,
       ),
@@ -43,15 +47,15 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.accentStart,
+        selectedItemColor: accentStart,
         unselectedItemColor: AppColors.textSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.accentStart,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: accentStart,
         foregroundColor: Colors.white,
       ),
     );

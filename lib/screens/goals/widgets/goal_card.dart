@@ -6,16 +6,20 @@ class GoalCard extends StatelessWidget {
   final String name;
   final double target;
   final double current;
+  final String? category;
   final IconData icon;
   final bool isCompleted;
+  final String? goalId;
 
   const GoalCard({
     super.key,
     required this.name,
     required this.target,
     required this.current,
+    this.category,
     required this.icon,
     this.isCompleted = false,
+    this.goalId,
   });
 
   @override
@@ -47,9 +51,30 @@ class GoalCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
-                    Text(
-                      isCompleted ? 'Hedef Tamamlandı!' : 'Hedef: ${Formatters.formatCurrency(target)}',
-                      style: TextStyle(color: isCompleted ? themeColor : AppColors.textSecondary, fontSize: 12, fontWeight: isCompleted ? FontWeight.bold : FontWeight.normal),
+                    Row(
+                      children: [
+                        if (category != null) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: themeColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              category!,
+                              style: TextStyle(color: themeColor, fontSize: 10, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                        ],
+                        Flexible(
+                          child: Text(
+                            isCompleted ? 'Hedef Tamamlandı!' : 'Hedef: ${Formatters.formatCurrency(target)}',
+                            style: TextStyle(color: isCompleted ? themeColor : AppColors.textSecondary, fontSize: 12, fontWeight: isCompleted ? FontWeight.bold : FontWeight.normal),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

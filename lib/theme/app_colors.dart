@@ -6,8 +6,8 @@ class AppColors {
   static const Color surface = Color(0xFF161B22);
   static const Color card = Color(0xFF21262D);
 
-  // Accents (Teal -> Cyan Gradient)
-  static const Color primary = Color(0xFF2EA043); // Success green
+  // Default Accents (Teal -> Cyan Gradient)
+  static const Color primary = Color(0xFF2EA043);
   static const Color accentStart = Color(0xFF0DBCB5);
   static const Color accentEnd = Color(0xFF00D2FF);
 
@@ -28,4 +28,17 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+
+  // Theme presets
+  static const Map<String, List<Color>> themePresets = {
+    'teal':   [Color(0xFF0DBCB5), Color(0xFF00D2FF)],
+    'purple': [Color(0xFF8B5CF6), Color(0xFFA855F7)],
+    'blue':   [Color(0xFF3B82F6), Color(0xFF06B6D4)],
+    'orange': [Color(0xFFF97316), Color(0xFFFBBF24)],
+    'rose':   [Color(0xFFF43F5E), Color(0xFFFB7185)],
+  };
+
+  static List<Color> getThemeColors(String themeName) {
+    return themePresets[themeName] ?? themePresets['teal']!;
+  }
 }
