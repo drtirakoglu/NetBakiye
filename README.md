@@ -55,3 +55,7 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 - `lib/screens`: Uygulama arayüzü (Dashboard, Auth, Budget vb.).
 - `lib/services`: Supabase entegrasyonu ve API servisleri.
 - `lib/theme`: Renk paleti ve yazı tipleri (Dark mode desteği).
+
+## 📄 Lisans
+
+Bu proje **MIT Lisansı** ile lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsiniz.
