@@ -16,7 +16,9 @@ class QuickAddSheet extends ConsumerStatefulWidget {
 
 class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
   final _amountController = TextEditingController();
+  final _noteController = TextEditingController();
   String? _selectedCategoryId;
+  String? _selectedAccountId;
   int _installmentCount = 1;
   bool _isLoading = false;
   bool _isExpense = true;
@@ -24,7 +26,7 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
   Future<void> _saveTransaction() async {
     final amountStr = _amountController.text.replaceAll(',', '.');
     final amount = double.tryParse(amountStr);
-    
+
     if (amount == null || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Geçerli bir tutar girin')));
       return;
@@ -40,9 +42,12 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
       if (accountsResult.isEmpty) {
         throw Exception('İşlem yapabilmek için en az bir hesabınız olmalı.');
       }
-      
-      final AppAccount account = accountsResult.first;
+
+      final AppAccount account = _selectedAccountId != null
+          ? accountsResult.firstWhere((a) => a.id == _selectedAccountId, orElse: () => accountsResult.first)
+          : accountsResult.first;
       final finalAmount = _isExpense ? -amount : amount;
+      final noteText = _noteController.text.trim().isEmpty ? null : _noteController.text.trim();
 
       final txs = InstallmentEngine.generateInstallments(
         userId: userId,
@@ -51,7 +56,7 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
         totalAmount: finalAmount,
         installmentCount: _isExpense ? _installmentCount : 1,
         startDate: DateTime.now(),
-        note: _isExpense ? 'Hızlı Harcama' : 'Gelir Girişi',
+        note: noteText ?? (_isExpense ? 'Hızlı Harcama' : 'Gelir Girişi'),
       );
 
       for (final tx in txs) {
@@ -63,7 +68,7 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
         userId: account.userId,
         name: account.name,
         type: account.type,
-        balance: account.balance + finalAmount, 
+        balance: account.balance + finalAmount,
         creditLimit: account.creditLimit,
         interestRate: account.interestRate,
       );
@@ -126,7 +131,6 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
               onPressed: () async {
                 if (nameController.text.trim().isEmpty) return;
                 final demo = ref.read(demoServiceProvider);
-                
                 final cat = AppCategory(
                   id: const Uuid().v4(),
                   userId: demo.currentUserId,
@@ -146,8 +150,8 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final categoriesAsync = ref.watch(categoriesStreamProvider);
-    final categories = categoriesAsync.value ?? [];
+    final categories = ref.watch(categoriesStreamProvider).value ?? [];
+    final accounts = ref.watch(accountsStreamProvider).value ?? [];
     final filteredCategories = categories.where((c) => _isExpense ? !c.isIncome : c.isIncome).toList();
 
     if (_selectedCategoryId == null && filteredCategories.isNotEmpty) {
@@ -155,13 +159,16 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
         if (mounted) setState(() => _selectedCategoryId = filteredCategories.first.id);
       });
     }
+    if (_selectedAccountId == null && accounts.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _selectedAccountId = accounts.first.id);
+      });
+    }
 
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-        top: 24,
-        left: 24,
-        right: 24,
+        top: 24, left: 24, right: 24,
       ),
       decoration: const BoxDecoration(
         color: AppColors.surface,
@@ -174,24 +181,18 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
           children: [
             // Gelir/Gider Toggle
             Container(
-              decoration: BoxDecoration(
-                color: AppColors.card,
-                borderRadius: BorderRadius.circular(12),
-              ),
+              decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12)),
               child: Row(
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => setState(() {
-                        _isExpense = true;
-                        _selectedCategoryId = null;
-                      }),
+                      onTap: () => setState(() { _isExpense = true; _selectedCategoryId = null; }),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: _isExpense ? AppColors.danger.withOpacity(0.2) : Colors.transparent,
+                          color: _isExpense ? AppColors.danger.withValues(alpha: 0.2) : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
-                          border: _isExpense ? Border.all(color: AppColors.danger.withOpacity(0.5)) : null,
+                          border: _isExpense ? Border.all(color: AppColors.danger.withValues(alpha: 0.5)) : null,
                         ),
                         child: Text(
                           '💸 Gider',
@@ -206,16 +207,13 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => setState(() {
-                        _isExpense = false;
-                        _selectedCategoryId = null;
-                      }),
+                      onTap: () => setState(() { _isExpense = false; _selectedCategoryId = null; }),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: !_isExpense ? AppColors.success.withOpacity(0.2) : Colors.transparent,
+                          color: !_isExpense ? AppColors.success.withValues(alpha: 0.2) : Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
-                          border: !_isExpense ? Border.all(color: AppColors.success.withOpacity(0.5)) : null,
+                          border: !_isExpense ? Border.all(color: AppColors.success.withValues(alpha: 0.5)) : null,
                         ),
                         child: Text(
                           '💰 Gelir',
@@ -250,7 +248,42 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+            // Account selector
+            if (accounts.isNotEmpty) ...[
+              const Text('Hesap', style: TextStyle(color: AppColors.textSecondary)),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                value: _selectedAccountId ?? accounts.first.id,
+                dropdownColor: AppColors.card,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.card,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  prefixIcon: const Icon(Icons.account_balance_rounded, color: AppColors.textSecondary, size: 18),
+                ),
+                style: const TextStyle(color: Colors.white),
+                items: accounts.map((a) => DropdownMenuItem(value: a.id, child: Text(a.name))).toList(),
+                onChanged: (v) => setState(() => _selectedAccountId = v),
+              ),
+              const SizedBox(height: 16),
+            ],
+            // Note field
+            TextField(
+              controller: _noteController,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Not ekle (isteğe bağlı)',
+                hintStyle: const TextStyle(color: AppColors.textMuted),
+                filled: true,
+                fillColor: AppColors.card,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                prefixIcon: const Icon(Icons.note_alt_outlined, color: AppColors.textSecondary, size: 18),
+              ),
+            ),
+            const SizedBox(height: 16),
             Row(
               children: [
                 const Text('Kategori Seçin', style: TextStyle(color: AppColors.textSecondary)),
@@ -282,7 +315,7 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
                         return ChoiceChip(
                           label: Text(cat.name),
                           selected: isSelected,
-                          onSelected: (val) => setState(() => _selectedCategoryId = cat.id),
+                          onSelected: (_) => setState(() => _selectedCategoryId = cat.id),
                           backgroundColor: AppColors.card,
                           selectedColor: AppColors.accentStart,
                           labelStyle: TextStyle(
@@ -307,7 +340,7 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
                       child: ChoiceChip(
                         label: Text(n == 1 ? 'Peşin' : '$n Taksit'),
                         selected: isSelected,
-                        onSelected: (val) => setState(() => _installmentCount = n),
+                        onSelected: (_) => setState(() => _installmentCount = n),
                         backgroundColor: AppColors.card,
                         selectedColor: AppColors.accentEnd,
                       ),
@@ -325,12 +358,12 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
-              child: _isLoading 
-                ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                : Text(
-                    _isExpense ? 'Harcamayı Kaydet' : 'Geliri Kaydet',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+              child: _isLoading
+                  ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                  : Text(
+                      _isExpense ? 'Harcamayı Kaydet' : 'Geliri Kaydet',
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
             ),
           ],
         ),

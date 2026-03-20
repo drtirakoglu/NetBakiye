@@ -15,7 +15,7 @@ class SettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Ayarlar'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => context.pop(),
         ),
       ),
@@ -44,6 +44,13 @@ class SettingsScreen extends ConsumerWidget {
               title: 'Güvenlik',
               subtitle: 'Şifre ve oturum ayarları',
               onTap: () {},
+            ),
+            const SizedBox(height: 8),
+            _buildSettingsTile(
+              icon: Icons.calendar_today_outlined,
+              title: 'Sabit Ödemeler',
+              subtitle: 'Kira, fatura ve abonelikleri yönetin',
+              onTap: () => context.push('/settings/fixed-payments'),
             ),
             const SizedBox(height: 32),
             const Text('Uygulama', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),

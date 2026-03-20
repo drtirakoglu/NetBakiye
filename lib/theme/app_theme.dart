@@ -52,7 +52,9 @@ class AppTheme {
         selectedItemColor: accentStart,
         unselectedItemColor: AppColors.textSecondary,
         type: BottomNavigationBarType.fixed,
-        elevation: 8,
+        elevation: 16,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+        unselectedLabelStyle: const TextStyle(fontSize: 11),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: accentStart,

@@ -5,6 +5,7 @@ import '../models/transaction_model.dart';
 import '../models/budget.dart';
 import '../models/goal.dart';
 import '../models/profile.dart';
+import '../models/fixed_payment.dart';
 
 /// A fully local, in-memory service for demo mode.
 /// No Supabase connection required.
@@ -17,6 +18,7 @@ class DemoService {
   final List<AppTransaction> _transactions = [];
   final List<AppBudget> _budgets = [];
   final List<AppGoal> _goals = [];
+  final List<FixedPayment> _fixedPayments = [];
   final List<Map<String, dynamic>> _sharedUsers = [];
   AppProfile _profile = AppProfile(
     id: demoUserId,
@@ -33,6 +35,7 @@ class DemoService {
   final _transactionsController = StreamController<List<Map<String, dynamic>>>.broadcast();
   final _budgetsController = StreamController<List<Map<String, dynamic>>>.broadcast();
   final _goalsController = StreamController<List<Map<String, dynamic>>>.broadcast();
+  final _fixedPaymentsController = StreamController<List<Map<String, dynamic>>>.broadcast();
 
   DemoService() {
     _initDemoData();
@@ -73,6 +76,91 @@ class DemoService {
       AppGoal(id: 'goal-3', userId: demoUserId, name: 'Acil Durum Fonu', category: 'Birikim', targetAmount: 100000, savedAmount: 32000, icon: 'savings'),
     ]);
 
+    // Demo fixed payments
+    _fixedPayments.addAll([
+      FixedPayment(id: 'fp-1', userId: demoUserId, name: 'Kira', amount: 15000.0, categoryId: 'cat-3', isVariable: false, dayOfMonth: 1),
+      FixedPayment(id: 'fp-2', userId: demoUserId, name: 'Netflix', amount: 180.0, categoryId: 'cat-4', isVariable: false, dayOfMonth: 15),
+      FixedPayment(id: 'fp-3', userId: demoUserId, name: 'Elektrik (Tahmini)', amount: 850.0, categoryId: 'cat-3', isVariable: true, dayOfMonth: 20),
+      FixedPayment(id: 'fp-4', userId: demoUserId, name: 'Su (Tahmini)', amount: 320.0, categoryId: 'cat-3', isVariable: true, dayOfMonth: 22),
+    ]);
+
+    // Demo transactions - rich dataset for last 6 months
+    final now = DateTime.now();
+
+    // Helper to create a date in current month
+    DateTime d(int daysAgo) => now.subtract(Duration(days: daysAgo));
+
+    // Current month transactions
+    _transactions.addAll([
+      AppTransaction(id: 'tx-001', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-6', amount: 35000.0, note: 'Mart ayı maaşı', date: d(18)),
+      AppTransaction(id: 'tx-002', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -15000.0, note: 'Kira - Mart', date: d(17)),
+      AppTransaction(id: 'tx-003', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-1', amount: -420.0, note: 'Migros alışveriş', date: d(16)),
+      AppTransaction(id: 'tx-004', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-1', amount: -285.0, note: 'Getir market', date: d(15)),
+      AppTransaction(id: 'tx-005', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-4', amount: -180.0, note: 'Netflix abonelik', date: d(15)),
+      AppTransaction(id: 'tx-006', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-2', amount: -350.0, note: 'Akaryakıt', date: d(14)),
+      AppTransaction(id: 'tx-007', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-1', amount: -195.0, note: 'Kahve & kafeterya', date: d(13)),
+      AppTransaction(id: 'tx-008', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-7', amount: 8500.0, note: 'Freelance proje ödemesi', date: d(12)),
+      AppTransaction(id: 'tx-009', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-5', amount: -650.0, note: 'Eczane', date: d(11)),
+      AppTransaction(id: 'tx-010', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-2', amount: -180.0, note: 'Metrobüs - aylık kart', date: d(10)),
+      AppTransaction(id: 'tx-011', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-1', amount: -540.0, note: 'A101 market', date: d(9)),
+      AppTransaction(id: 'tx-012', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-4', amount: -320.0, note: 'Sinema & yemek', date: d(8)),
+      AppTransaction(id: 'tx-013', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -820.0, note: 'Elektrik faturası', date: d(7)),
+      AppTransaction(id: 'tx-014', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -340.0, note: 'Su faturası', date: d(6)),
+      AppTransaction(id: 'tx-015', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-1', amount: -780.0, note: 'Haftalık market', date: d(5)),
+      AppTransaction(id: 'tx-016', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-2', amount: -220.0, note: 'Park ücreti', date: d(4)),
+      AppTransaction(id: 'tx-017', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-5', amount: -280.0, note: 'Diş hekimi', date: d(3)),
+      AppTransaction(id: 'tx-018', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-8', amount: 2000.0, note: 'Doğum günü hediyesi', date: d(2)),
+      AppTransaction(id: 'tx-019', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-1', amount: -155.0, note: 'Fırın & pastane', date: d(1)),
+      AppTransaction(id: 'tx-020', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-4', amount: -450.0, note: 'Spor salonu üyeliği', date: d(0)),
+    ]);
+
+    // Last month transactions
+    _transactions.addAll([
+      AppTransaction(id: 'tx-101', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-6', amount: 35000.0, note: 'Şubat ayı maaşı', date: DateTime(now.year, now.month - 1, 1)),
+      AppTransaction(id: 'tx-102', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -15000.0, note: 'Kira - Şubat', date: DateTime(now.year, now.month - 1, 2)),
+      AppTransaction(id: 'tx-103', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-1', amount: -3800.0, note: 'Aylık market harcaması', date: DateTime(now.year, now.month - 1, 10)),
+      AppTransaction(id: 'tx-104', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-2', amount: -1650.0, note: 'Ulaşım harcamaları', date: DateTime(now.year, now.month - 1, 15)),
+      AppTransaction(id: 'tx-105', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-4', amount: -900.0, note: 'Eğlence', date: DateTime(now.year, now.month - 1, 20)),
+      AppTransaction(id: 'tx-106', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -800.0, note: 'Elektrik faturası', date: DateTime(now.year, now.month - 1, 20)),
+      AppTransaction(id: 'tx-107', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-7', amount: 5000.0, note: 'Freelance ek gelir', date: DateTime(now.year, now.month - 1, 25)),
+    ]);
+
+    // 2 months ago
+    _transactions.addAll([
+      AppTransaction(id: 'tx-201', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-6', amount: 35000.0, note: 'Ocak ayı maaşı', date: DateTime(now.year, now.month - 2, 1)),
+      AppTransaction(id: 'tx-202', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -15000.0, note: 'Kira - Ocak', date: DateTime(now.year, now.month - 2, 2)),
+      AppTransaction(id: 'tx-203', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-1', amount: -4200.0, note: 'Market harcaması', date: DateTime(now.year, now.month - 2, 12)),
+      AppTransaction(id: 'tx-204', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-2', amount: -1800.0, note: 'Ulaşım', date: DateTime(now.year, now.month - 2, 18)),
+      AppTransaction(id: 'tx-205', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -860.0, note: 'Elektrik faturası', date: DateTime(now.year, now.month - 2, 20)),
+    ]);
+
+    // 3 months ago
+    _transactions.addAll([
+      AppTransaction(id: 'tx-301', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-6', amount: 33000.0, note: 'Aralık ayı maaşı', date: DateTime(now.year, now.month - 3, 1)),
+      AppTransaction(id: 'tx-302', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -15000.0, note: 'Kira', date: DateTime(now.year, now.month - 3, 2)),
+      AppTransaction(id: 'tx-303', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-1', amount: -5500.0, note: 'Yılbaşı market', date: DateTime(now.year, now.month - 3, 20)),
+      AppTransaction(id: 'tx-304', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-4', amount: -2800.0, note: 'Yılbaşı kutlaması', date: DateTime(now.year, now.month - 3, 31)),
+      AppTransaction(id: 'tx-305', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -780.0, note: 'Elektrik faturası', date: DateTime(now.year, now.month - 3, 20)),
+    ]);
+
+    // 4 months ago
+    _transactions.addAll([
+      AppTransaction(id: 'tx-401', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-6', amount: 33000.0, note: 'Kasım ayı maaşı', date: DateTime(now.year, now.month - 4, 1)),
+      AppTransaction(id: 'tx-402', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -15000.0, note: 'Kira', date: DateTime(now.year, now.month - 4, 2)),
+      AppTransaction(id: 'tx-403', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-1', amount: -3600.0, note: 'Market', date: DateTime(now.year, now.month - 4, 15)),
+      AppTransaction(id: 'tx-404', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-2', amount: -1500.0, note: 'Ulaşım', date: DateTime(now.year, now.month - 4, 18)),
+      AppTransaction(id: 'tx-405', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -840.0, note: 'Elektrik faturası', date: DateTime(now.year, now.month - 4, 20)),
+    ]);
+
+    // 5 months ago
+    _transactions.addAll([
+      AppTransaction(id: 'tx-501', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-6', amount: 33000.0, note: 'Ekim ayı maaşı', date: DateTime(now.year, now.month - 5, 1)),
+      AppTransaction(id: 'tx-502', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -15000.0, note: 'Kira', date: DateTime(now.year, now.month - 5, 2)),
+      AppTransaction(id: 'tx-503', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-1', amount: -3400.0, note: 'Market', date: DateTime(now.year, now.month - 5, 15)),
+      AppTransaction(id: 'tx-504', userId: demoUserId, accountId: 'acc-2', categoryId: 'cat-2', amount: -1400.0, note: 'Ulaşım', date: DateTime(now.year, now.month - 5, 18)),
+      AppTransaction(id: 'tx-505', userId: demoUserId, accountId: 'acc-1', categoryId: 'cat-3', amount: -800.0, note: 'Elektrik faturası', date: DateTime(now.year, now.month - 5, 20)),
+    ]);
+
     // Emit initial data
     _emitAll();
   }
@@ -83,6 +171,7 @@ class DemoService {
     _transactionsController.add(_transactions.map((t) => t.toJson()).toList());
     _budgetsController.add(_budgets.map((b) => b.toJson()).toList());
     _goalsController.add(_goals.map((g) => g.toJson()).toList());
+    _fixedPaymentsController.add(_fixedPayments.map((fp) => fp.toJson()).toList());
   }
 
   // AUTH (simulated)
@@ -162,6 +251,23 @@ class DemoService {
     _goalsController.add(_goals.map((g) => g.toJson()).toList());
   }
 
+  // FIXED PAYMENTS
+  Future<void> createFixedPayment(FixedPayment fp) async {
+    _fixedPayments.add(fp);
+    _fixedPaymentsController.add(_fixedPayments.map((f) => f.toJson()).toList());
+  }
+
+  Future<void> updateFixedPayment(FixedPayment fp) async {
+    _fixedPayments.removeWhere((f) => f.id == fp.id);
+    _fixedPayments.add(fp);
+    _fixedPaymentsController.add(_fixedPayments.map((f) => f.toJson()).toList());
+  }
+
+  Future<void> deleteFixedPayment(String id) async {
+    _fixedPayments.removeWhere((f) => f.id == id);
+    _fixedPaymentsController.add(_fixedPayments.map((f) => f.toJson()).toList());
+  }
+
   // SHARED USERS
   Future<List<Map<String, dynamic>>> getSharedUsers() async => _sharedUsers;
   Future<void> addSharedUser(String email) async {
@@ -195,6 +301,9 @@ class DemoService {
       case 'goals':
         yield _goals.map((g) => g.toJson()).toList();
         yield* _goalsController.stream;
+      case 'fixed_payments':
+        yield _fixedPayments.map((fp) => fp.toJson()).toList();
+        yield* _fixedPaymentsController.stream;
     }
   }
 
@@ -204,5 +313,6 @@ class DemoService {
     _transactionsController.close();
     _budgetsController.close();
     _goalsController.close();
+    _fixedPaymentsController.close();
   }
 }

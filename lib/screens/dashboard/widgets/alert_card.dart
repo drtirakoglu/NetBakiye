@@ -22,6 +22,7 @@ class AlertCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withOpacity(0.15)),
       ),
       child: Row(
         children: [
