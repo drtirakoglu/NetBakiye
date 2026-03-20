@@ -16,13 +16,45 @@ NetBakiye is a next-generation budget tracking and wealth management application
 
 ## 🚀 Özellikler
 
-- **Özet Panosu (Dashboard):** Gerçek net bakiye, varlıklar ve borçlarınızı anlık takip edin.
-- **Hızlı İşlem Girişi:** Gelir ve giderlerinizi taksit seçenekleriyle saniyeler içinde kaydedin.
-- **Dinamik Tema Sistemi:** 5 farklı premium renk teması (Teal, Mor, Mavi, Turuncu, Pembe) ile uygulamayı kişiselleştirin.
-- **Demo Modu:** Supabase bağlantısı olmadan, yerel verilerle tüm özellikleri keşfedin.
-- **AI Röntgen Raporu:** Finansal durumunuza göre yapay zeka destekli tavsiyeler alın.
-- **Tasarruf Hedefleri:** Sürpriz para girişi gibi dinamik kategorilerle birikimlerinizi yönetin.
-- **Paylaşımlı Erişim:** Hesabınıza erişebilecek diğer kullanıcıları yönetin.
+### 🏠 Özet Panosu (Dashboard)
+- Gerçek net bakiye, varlıklar ve borçları anlık takip
+- **Nakit Akışı Trendi:** Son 6 aylık çizgi grafiği
+- **En Çok Harcanan Kategoriler:** Sıralı progress bar'lar ile görsel kırılım
+- **Yaklaşan Ödemeler:** 7 günlük mini ödeme listesi
+- **Bütçe Özeti:** Allocated vs Spent karşılaştırmalı progress bar'lar
+- **Güvenli Harcama Limiti:** Faiz maliyeti düşüldükten sonra harcanabilir tutar
+
+### 📋 İşlem Geçmişi & Filtreleme
+- Tarih gruplu liste (Bugün / Dün / Bu Hafta / Bu Ay)
+- Ad ve not bazlı arama
+- Hesap, kategori, dönem ve gelir/gider filtresi
+- Kaydırarak silme (swipe-to-delete)
+- Gelir/gider özet satırı
+
+### 📊 Raporlar
+- Dönem seçici (Bu Hafta / Bu Ay / Bu Yıl)
+- Kategoriye göre interaktif pasta grafiği
+- Gelir–Gider karşılaştırma çubuk grafiği
+- Birikim oranı göstergesi
+- Kategori dağılım listesi (% ve tutar)
+
+### 📅 Takvim
+- Aylık ızgara görünümü
+- İşlem ve sabit ödemelerin renkli nokta/badge ile gösterimi
+- Güne tıklayarak o günün işlem ve ödemelerini görme
+
+### ➕ Gelişmiş İşlem Ekleme
+- Hesap seçici dropdown
+- Not alanı
+- Taksit seçenekleri
+- Kategori seçici
+
+### ⚙️ Diğer
+- **Demo Modu:** Supabase bağlantısı olmadan tüm özellikleri keşfedin
+- **Dinamik Tema Sistemi:** 5 farklı premium renk teması (Teal, Mor, Mavi, Turuncu, Pembe)
+- **AI Röntgen Raporu:** Finansal durumunuza göre yapay zeka destekli tavsiyeler
+- **Tasarruf Hedefleri:** Dinamik kategorilerle birikim yönetimi
+- **Paylaşımlı Erişim:** Hesabınıza erişebilecek kullanıcıları yönetin
 
 ## 🛠️ Teknoloji Yığını
 
@@ -31,33 +63,33 @@ NetBakiye is a next-generation budget tracking and wealth management application
 - **Backend:** [Supabase](https://supabase.com) & Local Demo Service
 - **Navigation:** [Go Router](https://pub.dev/packages/go_router)
 - **Charts:** [FL Chart](https://pub.dev/packages/fl_chart)
-
+- **Hosting:** [Firebase Hosting](https://firebase.google.com/products/hosting)
 
 ## 📦 Kurulum
 
 Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin:
 
-1.  **Repoyu klonlayın:**
-    ```bash
-    git clone https://github.com/kullaniciadi/netbakiye.git
-    ```
-2.  **Bağımlılıkları yükleyin:**
-    ```bash
-    flutter pub get
-    ```
-3.  **Supabase yapılandırmasını yapın:**
-    `lib/main.dart` içerisindeki Supabase URL ve anon key bilgilerini kendi projenize göre güncelleyin.
-4.  **Uygulamayı çalıştırın:**
-    ```bash
-    flutter run
-    ```
+1. **Repoyu klonlayın:**
+   ```bash
+   git clone https://github.com/drtirakoglu/NetBakiye.git
+   ```
+2. **Bağımlılıkları yükleyin:**
+   ```bash
+   flutter pub get
+   ```
+3. **Supabase yapılandırmasını yapın:**
+   `lib/main.dart` içerisindeki Supabase URL ve anon key bilgilerini kendi projenize göre güncelleyin.
+4. **Uygulamayı çalıştırın:**
+   ```bash
+   flutter run
+   ```
 
 ## 📂 Proje Yapısı
 
 - `lib/models`: Veri modelleri ve JSON serileştirme.
 - `lib/providers`: Riverpod state provider'ları.
-- `lib/screens`: Uygulama arayüzü (Dashboard, Auth, Budget vb.).
-- `lib/services`: Supabase entegrasyonu ve API servisleri.
+- `lib/screens`: Uygulama arayüzü (Dashboard, İşlemler, Raporlar, Takvim vb.).
+- `lib/services`: Supabase entegrasyonu ve Demo servisi.
 - `lib/theme`: Renk paleti ve yazı tipleri (Dark mode desteği).
 
 ## 📄 Lisans
