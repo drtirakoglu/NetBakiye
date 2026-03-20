@@ -10,6 +10,10 @@ NetBakiye, karmaşık finansal tablolar yerine sade, şık ve sonuç odaklı bir
 
 NetBakiye is a next-generation budget tracking and wealth management application built with Flutter. It goes beyond simple expense logging to provide a holistic view of your "True Net Worth" by orchestrating assets, debts, and installment burdens in one elegant interface.
 
+## 🌐 Canlı Demo
+
+**[https://netbakiye-1234.web.app](https://netbakiye-1234.web.app)**
+
 ## 🚀 Özellikler
 
 - **Özet Panosu (Dashboard):** Gerçek net bakiye, varlıklar ve borçlarınızı anlık takip edin.
